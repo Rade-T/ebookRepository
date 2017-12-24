@@ -1,15 +1,47 @@
 package ebookRepository.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="Ebook")
 public class Ebook {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;
+	
+	@Column(name="Title", columnDefinition="varchar(80)")
 	private String title;
+	
+	@Column(name="Author", columnDefinition="varchar(120)")
 	private String author;
+	
+	@Column(name="keywords", columnDefinition="varchar(120)")
 	private String keywords;
+	
+	@Column(name="PublicationYear", columnDefinition="int")
 	private int publicationYear;
+	
+	@Column(name="Filename", columnDefinition="varchar(200)")
 	private String filename;
+	
+	@Column(name="MIME", columnDefinition="varchar(100)")
 	private String MIME;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Language language;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private Category category;
+	
+	@ManyToOne(fetch=FetchType.EAGER)
 	private User cataloguer;
 	
 	public long getId() {
