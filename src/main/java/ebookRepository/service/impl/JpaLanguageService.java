@@ -7,45 +7,48 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ebookRepository.model.Language;
+import ebookRepository.repository.LanguageRepository;
 import ebookRepository.service.LanguageService;
 
 @Transactional
 @Service
 public class JpaLanguageService implements LanguageService {
+	@Autowired
+	private LanguageRepository languageRepository;
 
 	@Override
 	public Language findOne(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return languageRepository.findOne(id);
 	}
 
 	@Override
 	public List<Language> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return languageRepository.findAll();
 	}
 
 	@Override
 	public Language save(Language language) {
-		// TODO Auto-generated method stub
-		return null;
+		return languageRepository.save(language);
 	}
 
 	@Override
 	public List<Language> save(List<Language> languages) {
-		// TODO Auto-generated method stub
-		return null;
+		return languageRepository.save(languages);
 	}
 
 	@Override
 	public Language delete(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Language language = findOne(id);
+		if (language == null) {
+			throw new IllegalArgumentException("Tried to delete a null language");
+		}
+		languageRepository.delete(language);
+		return language;
 	}
 
 	@Override
 	public List<Language> delete(List<Language> languages) {
-		// TODO Auto-generated method stub
+		languageRepository.delete(languages);
 		return null;
 	}
 
