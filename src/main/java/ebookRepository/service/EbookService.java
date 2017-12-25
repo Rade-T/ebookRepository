@@ -1,4 +1,4 @@
-package ebookRepository.repository;
+package ebookRepository.service;
 
 import java.util.List;
 
