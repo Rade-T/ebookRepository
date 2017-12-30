@@ -37,6 +37,9 @@ public class EbookDTO {
 		this.cataloguerId = cataloguerId;
 	}
 
+	public EbookDTO() {
+	}
+
 	public long getId() {
 		return id;
 	}

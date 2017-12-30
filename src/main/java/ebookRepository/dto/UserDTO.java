@@ -28,6 +28,9 @@ public class UserDTO {
 		this.categoryId = categoryId;
 	}
 
+	public UserDTO() {
+	}
+
 	public long getId() {
 		return id;
 	}
