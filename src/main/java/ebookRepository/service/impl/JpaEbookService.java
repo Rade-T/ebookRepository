@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ebookRepository.model.Ebook;
-import ebookRepository.repository.CategoryRepository;
 import ebookRepository.repository.EbookRepository;
 import ebookRepository.service.EbookService;
 
