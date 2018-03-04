@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<script
+              src="https://code.jquery.com/jquery-2.2.4.min.js"
+              integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+              crossorigin="anonymous"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ebookRepositoryFrontend</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-default navigation-clean-button">
+            <div class="container">
+                <div class="navbar-header"><a class="navbar-brand" href="#">Knjige</a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+                <div
+                    class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active" role="presentation"><a id="#newEbookButton" href="#">Nova knjiga</a></li>
+                    </ul>
+                    <p class="navbar-text navbar-right actions"><a class="navbar-link login" href="#">Log In</a> </p>
+            </div>
+    </div>
+    </nav>
+    </div>
+    <div class="container">
+        <div id="addEbookPanel" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nova knjiga</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naslov</span><input class="form-control" type="text"></div>
+                    <div class="form-group"><span class="label label-default">Autor</span><input class="form-control" type="text"></div>
+                    <div class="form-group"><span class="label label-default">Godina izdanja</span><input class="form-control" type="text"></div>
+                    <div class="form-group"><span class="label label-default">Fajl</span><input type="file"></div><button class="btn btn-default" type="button">Dodaj</button></form>
+            </div>
+        </div>
+        <div id="editEbookPanel" class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Izmena knjige</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naslov</span><input class="form-control" type="text"></div>
+                    <div class="form-group"><span class="label label-default">Autor</span><input class="form-control" type="text"></div>
+                    <div class="form-group"><span class="label label-default">Godina izdanja</span><input class="form-control" type="text"></div><button class="btn btn-default" type="button">Izmeni</button></form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Naslov</th>
+                        <th>Autor</th>
+                        <th>Godina izdanja</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="application/javascript" src="ebooks.js"></script>
+</body>
+</html>

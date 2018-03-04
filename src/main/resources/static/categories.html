@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ebookRepositoryFrontend</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-default navigation-clean-button">
+            <div class="container">
+                <div class="navbar-header"><a class="navbar-brand" href="#">Kategorije</a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+                <div
+                    class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active" role="presentation"><a id="newCategoryBtn" href="#">Nova kategorija</a></li>
+                    </ul>
+                    <p class="navbar-text navbar-right actions"><a class="navbar-link login" href="#">Log In</a> </p>
+            </div>
+    </div>
+    </nav>
+    </div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Nova kategorija</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naziv</span><input id="nameInput" class="form-control" type="text"></div><button id="addCategoryBtn" class="btn btn-default" type="button">Dodaj</button></form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Izmena kategorije</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naziv</span><input class="form-control" type="text"></div><button class="btn btn-default" type="button">Izmeni</button></form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="#categoryTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/categories.js"></script>
+</body>
+
+</html>
