@@ -11,36 +11,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ebookRepository.converter.CategoryDTOtoCategory;
-import ebookRepository.converter.CategoryToCategoryDTO;
-import ebookRepository.dto.CategoryDTO;
 import ebookRepository.model.Category;
 import ebookRepository.service.CategoryService;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(path="/api/categories")
 public class CategoryController {
 
 	@Autowired
 	private CategoryService categoryService;
 	
-	@Autowired
-	private CategoryDTOtoCategory toCategory;
+//	@Autowired
+//	private CategoryDTOtoCategory toCategory;
+//	
+//	@Autowired
+//	private CategoryToCategoryDTO toCategoryDTO;
 	
-	@Autowired
-	private CategoryToCategoryDTO toCategoryDTO;
-	
-	@RequestMapping(value="getCategories", method = RequestMethod.GET)
-	public ResponseEntity<List<CategoryDTO>> getCategories() {
+	@RequestMapping(value="/getCategories", method = RequestMethod.GET)
+	public ResponseEntity<List<Category>> getCategories() {
 
-		List<CategoryDTO> categories = toCategoryDTO.convert(categoryService.findAll());
+		List<Category> categories = categoryService.findAll();
 
 		return new ResponseEntity<>(categories, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
-		CategoryDTO category = toCategoryDTO.convert(categoryService.findOne(id));
+	public ResponseEntity<Category> getCategory(@PathVariable Long id) {
+		Category category = categoryService.findOne(id);
 		if (category == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -49,15 +46,15 @@ public class CategoryController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<CategoryDTO> saveCategory(@RequestBody CategoryDTO categoryDTO) {
+	public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
 		
-		Category newCategory = categoryService.save(toCategory.convert(categoryDTO));
-		return new ResponseEntity<>(toCategoryDTO.convert(newCategory), HttpStatus.OK);
+		Category newCategory = categoryService.save(category);
+		return new ResponseEntity<>(newCategory, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<CategoryDTO> delete(@PathVariable Long id) {
-		CategoryDTO deleted = toCategoryDTO.convert(categoryService.delete(id));
+	public ResponseEntity<Category> delete(@PathVariable Long id) {
+		Category deleted = categoryService.delete(id);
 
 		return new ResponseEntity<>(deleted, HttpStatus.OK);
 	}

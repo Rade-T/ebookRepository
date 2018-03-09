@@ -1,5 +1,7 @@
 package ebookRepository.dto;
 
+import ebookRepository.model.Category;
+
 public class CategoryDTO {
 	
 	private long id;
@@ -12,6 +14,11 @@ public class CategoryDTO {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+	
+	public CategoryDTO(Category c) {
+		this.id = c.getId();
+		this.name = c.getName();
 	}
 
 	public long getId() {

@@ -1,4 +1,4 @@
-package ebookRepository.ebookRepository;
+package ebookRepository;
 
 import java.io.IOException;
 

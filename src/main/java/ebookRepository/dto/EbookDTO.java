@@ -1,5 +1,7 @@
 package ebookRepository.dto;
 
+import ebookRepository.model.Ebook;
+
 public class EbookDTO {
 
 	private long id;
@@ -35,6 +37,19 @@ public class EbookDTO {
 		this.languageId = languageId;
 		this.categoryId = categoryId;
 		this.cataloguerId = cataloguerId;
+	}
+	
+	public EbookDTO(Ebook e) {
+		this.id = e.getId();
+		this.title = e.getTitle();
+		this.author = e.getAuthor();
+		this.keywords = e.getKeywords();
+		this.publicationYear = e.getPublicationYear();
+		this.filename = e.getFilename();
+		this.MIME = e.getMIME();
+		this.languageId = e.getLanguage().getId();
+		this.categoryId = e.getCategory().getId();
+		this.cataloguerId = e.getCataloguer().getId();
 	}
 
 	public EbookDTO() {

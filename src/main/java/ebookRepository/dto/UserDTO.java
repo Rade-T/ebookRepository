@@ -1,5 +1,7 @@
 package ebookRepository.dto;
 
+import ebookRepository.model.User;
+
 public class UserDTO {
 	
 	private long id;
@@ -26,6 +28,16 @@ public class UserDTO {
 		this.password = password;
 		this.type = type;
 		this.categoryId = categoryId;
+	}
+	
+	public UserDTO(User u) {
+		this.id = u.getId();
+		this.firstname = u.getFirstname();
+		this.lastname = u.getLastname();
+		this.username = u.getUsername();
+		this.password = u.getPassword();
+		this.type = u.getType();
+		this.categoryId = u.getCategory().getId();
 	}
 
 	public UserDTO() {

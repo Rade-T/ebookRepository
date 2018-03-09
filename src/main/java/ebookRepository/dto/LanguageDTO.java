@@ -1,5 +1,7 @@
 package ebookRepository.dto;
 
+import ebookRepository.model.Language;
+
 public class LanguageDTO {
 	
 	private long id;
@@ -10,6 +12,11 @@ public class LanguageDTO {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+	
+	public LanguageDTO(Language l) {
+		this.id = l.getId();
+		this.name = l.getName();
 	}
 	
 	public LanguageDTO() {

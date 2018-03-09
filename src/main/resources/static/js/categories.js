@@ -26,8 +26,8 @@ $("#addCategoryBtn").on("click", function(event) {
 
 		},
 		error: function (err) {
-            var text = err.responseJSON;
-            alert(text['message']);
+//            var text = err.responseJSON;
+            alert("Greska");
         }
 	});
 });
