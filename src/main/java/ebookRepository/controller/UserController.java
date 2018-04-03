@@ -24,41 +24,35 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 	
-	@Autowired
-	private UserDTOtoUser toUser;
-	
-	@Autowired
-	private UserToUserDTO toUserDTO;
-	
-	@RequestMapping(value="getUsers", method = RequestMethod.GET)
-	public ResponseEntity<List<UserDTO>> getUsers() {
-
-		List<UserDTO> users = toUserDTO.convert(userService.findAll());
-
-		return new ResponseEntity<>(users, HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
-		UserDTO user = toUserDTO.convert(userService.findOne(id));
-		if (user == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		return new ResponseEntity<>(user, HttpStatus.OK);
-	}
-	
-	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
-		
-		User newUser = userService.save(toUser.convert(userDTO));
-		return new ResponseEntity<>(toUserDTO.convert(newUser), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<UserDTO> delete(@PathVariable Long id) {
-		UserDTO deleted = toUserDTO.convert(userService.delete(id));
-
-		return new ResponseEntity<>(deleted, HttpStatus.OK);
-	}
+//	@RequestMapping(value="getUsers", method = RequestMethod.GET)
+//	public ResponseEntity<List<UserDTO>> getUsers() {
+//
+//		List<UserDTO> users = toUserDTO.convert(userService.findAll());
+//
+//		return new ResponseEntity<>(users, HttpStatus.OK);
+//	}
+//
+//	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+//	public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+//		UserDTO user = toUserDTO.convert(userService.findOne(id));
+//		if (user == null) {
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		}
+//
+//		return new ResponseEntity<>(user, HttpStatus.OK);
+//	}
+//	
+//	@RequestMapping(method=RequestMethod.POST)
+//	public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
+//		
+//		User newUser = userService.save(toUser.convert(userDTO));
+//		return new ResponseEntity<>(toUserDTO.convert(newUser), HttpStatus.OK);
+//	}
+//
+//	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+//	public ResponseEntity<UserDTO> delete(@PathVariable Long id) {
+//		UserDTO deleted = toUserDTO.convert(userService.delete(id));
+//
+//		return new ResponseEntity<>(deleted, HttpStatus.OK);
+//	}
 }

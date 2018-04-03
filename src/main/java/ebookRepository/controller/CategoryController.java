@@ -1,5 +1,6 @@
 package ebookRepository.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ebookRepository.dto.CategoryDTO;
 import ebookRepository.model.Category;
 import ebookRepository.service.CategoryService;
 
@@ -21,41 +23,40 @@ public class CategoryController {
 	@Autowired
 	private CategoryService categoryService;
 	
-//	@Autowired
-//	private CategoryDTOtoCategory toCategory;
-//	
-//	@Autowired
-//	private CategoryToCategoryDTO toCategoryDTO;
-	
-	@RequestMapping(value="/getCategories", method = RequestMethod.GET)
-	public ResponseEntity<List<Category>> getCategories() {
+	@RequestMapping(method = RequestMethod.GET)
+	public ResponseEntity<List<CategoryDTO>> getCategories() {
 
 		List<Category> categories = categoryService.findAll();
+		List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>();
+		for (Category category : categories) {
+			categoriesDTO.add(new CategoryDTO(category));
+		}
 
-		return new ResponseEntity<>(categories, HttpStatus.OK);
+		return new ResponseEntity<>(categoriesDTO, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public ResponseEntity<Category> getCategory(@PathVariable Long id) {
+	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
 		Category category = categoryService.findOne(id);
 		if (category == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(category, HttpStatus.OK);
+		return new ResponseEntity<>(new CategoryDTO(category), HttpStatus.OK);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Category> saveCategory(@RequestBody Category category) {
+	public ResponseEntity<String> saveCategory(@RequestBody CategoryDTO categoryDTO) {
 		
-		Category newCategory = categoryService.save(category);
-		return new ResponseEntity<>(newCategory, HttpStatus.OK);
+		Category category = new Category();
+		category.setName(categoryDTO.getName());
+		categoryService.save(category);
+		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<Category> delete(@PathVariable Long id) {
-		Category deleted = categoryService.delete(id);
-
-		return new ResponseEntity<>(deleted, HttpStatus.OK);
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		categoryService.delete(id);
+		return new ResponseEntity<>("Deleted", HttpStatus.OK);
 	}
 }

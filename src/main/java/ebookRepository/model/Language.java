@@ -7,8 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import ebookRepository.dto.LanguageDTO;
+
 @Entity
-//@Table(name="Language")
+@Table(name="Language")
 public class Language {
 	
 	@Id
@@ -18,6 +20,14 @@ public class Language {
 	@Column(name="Name", columnDefinition="varchar(30)")
 	private String name;
 	
+	public Language(LanguageDTO l) {
+		this.id = l.getId();
+		this.name = l.getName();
+	}
+	
+	public Language() {
+	}
+
 	public long getId() {
 		return id;
 	}

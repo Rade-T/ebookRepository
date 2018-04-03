@@ -7,17 +7,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import ebookRepository.dto.CategoryDTO;
+
 @Entity
-//@Table(name="Category")
+@Table(name="Category")
 public class Category {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	
-//	@Column(name="Name", columnDefinition="varchar(30)")
+	@Column(name="Name", columnDefinition="varchar(30)")
 	private String name;
 	
+	public Category(CategoryDTO c) {
+		this.id = c.getId();
+		this.name = c.getName();
+	}
+	
+	public Category() {
+	}
+
 	public long getId() {
 		return id;
 	}

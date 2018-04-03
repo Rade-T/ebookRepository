@@ -1,5 +1,6 @@
 package ebookRepository.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,41 +25,38 @@ public class LanguageController {
 	@Autowired
 	private LanguageService languageService;
 	
-	@Autowired
-	private LanguageDTOtoLanguage toLanguage;
-	
-	@Autowired
-	private LanguageToLanguageDTO toLanguageDTO;
-	
 	@RequestMapping(value="getLanguages", method = RequestMethod.GET)
 	public ResponseEntity<List<LanguageDTO>> getLanguages() {
 
-		List<LanguageDTO> languages = toLanguageDTO.convert(languageService.findAll());
-
-		return new ResponseEntity<>(languages, HttpStatus.OK);
+		List<Language> languages = languageService.findAll();
+		List<LanguageDTO> languagesDTO = new ArrayList<>();
+		for (Language language : languages) {
+			languagesDTO.add(new LanguageDTO(language));
+		}
+		return new ResponseEntity<>(languagesDTO, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<LanguageDTO> getLanguage(@PathVariable Long id) {
-		LanguageDTO language = toLanguageDTO.convert(languageService.findOne(id));
+		Language language = languageService.findOne(id);
 		if (language == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 
-		return new ResponseEntity<>(language, HttpStatus.OK);
+		return new ResponseEntity<>(new LanguageDTO(language), HttpStatus.OK);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<LanguageDTO> saveLanguage(@RequestBody LanguageDTO languageDTO) {
-		
-		Language newLanguage = languageService.save(toLanguage.convert(languageDTO));
-		return new ResponseEntity<>(toLanguageDTO.convert(newLanguage), HttpStatus.OK);
+	public ResponseEntity<String> saveLanguage(@RequestBody LanguageDTO languageDTO) {
+		Language l = new Language();
+		l.setName(languageDTO.getName());
+		languageService.save(l);
+		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<LanguageDTO> delete(@PathVariable Long id) {
-		LanguageDTO deleted = toLanguageDTO.convert(languageService.delete(id));
-
-		return new ResponseEntity<>(deleted, HttpStatus.OK);
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		languageService.delete(id);
+		return new ResponseEntity<>("Deleted", HttpStatus.OK);
 	}
 }

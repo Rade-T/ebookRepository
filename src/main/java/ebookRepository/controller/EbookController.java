@@ -1,5 +1,6 @@
 package ebookRepository.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import ebookRepository.converter.EbookDTOtoEbook;
-import ebookRepository.converter.EbookToEbookDTO;
 import ebookRepository.dto.EbookDTO;
 import ebookRepository.model.Ebook;
+import ebookRepository.service.CategoryService;
 import ebookRepository.service.EbookService;
+import ebookRepository.service.LanguageService;
+import ebookRepository.service.UserService;
 
 @RestController
 @RequestMapping("/api/ebooks")
@@ -25,40 +27,55 @@ public class EbookController {
 	private EbookService ebookService;
 	
 	@Autowired
-	private EbookDTOtoEbook toEbook;
+	private LanguageService languageService;
 	
 	@Autowired
-	private EbookToEbookDTO toEbookDTO;
+	private UserService userService;
 	
-	@RequestMapping(value="getEbooks", method = RequestMethod.GET)
+	@Autowired
+	private CategoryService categoryService;
+	
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<EbookDTO>> getEbooks() {
 
-		List<EbookDTO> ebooks = toEbookDTO.convert(ebookService.findAll());
+		List<Ebook> ebooks = ebookService.findAll();
+		List<EbookDTO> ebooksDTO = new ArrayList<>();
+		for (Ebook ebook : ebooks) {
+			ebooksDTO.add(new EbookDTO(ebook));
+		}
 
-		return new ResponseEntity<>(ebooks, HttpStatus.OK);
+		return new ResponseEntity<>(ebooksDTO, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<EbookDTO> getEbook(@PathVariable Long id) {
-		EbookDTO ebook = toEbookDTO.convert(ebookService.findOne(id));
+		Ebook ebook = ebookService.findOne(id);
 		if (ebook == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-
-		return new ResponseEntity<>(ebook, HttpStatus.OK);
+		EbookDTO ebookDTO = new EbookDTO(ebook);
+		return new ResponseEntity<>(ebookDTO, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<EbookDTO> saveEbook(@RequestBody EbookDTO ebookDTO) {
-		
-		Ebook newEbook = ebookService.save(toEbook.convert(ebookDTO));
-		return new ResponseEntity<>(toEbookDTO.convert(newEbook), HttpStatus.OK);
+	public ResponseEntity<String> saveEbook(@RequestBody EbookDTO ebookDTO) {
+		Ebook ebook = new Ebook();
+		ebook.setTitle(ebookDTO.getTitle());
+		ebook.setAuthor(ebookDTO.getAuthor());
+		ebook.setKeywords(ebookDTO.getKeywords());
+		ebook.setFilename(ebookDTO.getFilename());
+		ebook.setMIME(ebookDTO.getMIME());
+		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguerId()));
+		ebook.setCategory(categoryService.findOne(ebookDTO.getCategoryId()));
+		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguageId()));
+		ebookService.save(ebook);
+		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public ResponseEntity<EbookDTO> delete(@PathVariable Long id) {
-		EbookDTO deleted = toEbookDTO.convert(ebookService.delete(id));
+	public ResponseEntity<String> delete(@PathVariable Long id) {
+		ebookService.delete(id);
 
-		return new ResponseEntity<>(deleted, HttpStatus.OK);
+		return new ResponseEntity<>("Deleted", HttpStatus.OK);
 	}
 }
