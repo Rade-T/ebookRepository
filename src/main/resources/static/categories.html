@@ -9,11 +9,14 @@
     <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
     <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="js/categories.js"></script>
+	<script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/categories.js"></script>
 </head>
 
 <body ng-app="cat-app">
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-	<script src="js/categories.js"></script>
 	<div ng-controller="CategoryCRUDCtrl">
     <div>
         <nav class="navbar navbar-default navigation-clean-button">
@@ -36,7 +39,7 @@
             </div>
             <div class="panel-body">
                 <form>
-                    <div class="form-group"><span class="label label-default">Naziv</span><input ng-model=category.name id="nameInput" class="form-control" type="text"></div><button ng-click="addCategory(category.name)" id="addCategoryBtn" class="btn btn-default" type="button">Dodaj</button></form>
+                    <div class="form-group"><span class="label label-default">Naziv</span><input ng-model="category.name" id="nameInput" class="form-control" type="text"></div><button ng-click="saveCategory()" id="addCategoryBtn" class="btn btn-default" type="button">Sacuvaj</button></form>
             </div>
         </div>
         <div class="panel panel-default">
@@ -49,24 +52,25 @@
             </div>
         </div>
         <div class="table-responsive">
-            <table id="#categoryTable" class="table">
+            <table id="categoryTable" class="table">
                 <thead>
                     <tr>
                         <th>Naziv</th>
                     </tr>
                 </thead>
-                <tbody id="categoryTableBody" ng-repeat="x in categories">
+                <tbody id="categoryTableBody" ng-repeat="x in categories track by $index">
                 	<tr>
-                		<td ng-click="selectCategory(x.id)">{{x.name}}</td>
+                		<td>{{x.name}}</td>
+                		<td>
+                			<button ng-click="selectCategory(x.id)" type="button" class="btn btn-primary">Izmeni</button>
+                			<button ng-click="deleteCategory(x.id)" type="button" class="btn btn-danger">Obrisi</button>
+                		</td>
                 	</tr>
                 </tbody>
             </table>
         </div>
     </div>
     </div> <!--controller div -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/categories.js"></script>
 </body>
 
 </html>

@@ -1,6 +1,6 @@
 var app = angular.module('cat-app', []);
 
-app.controller('CategoryCRUDCtrl', ['$scope', '$http', 'CategoryCRUDService', function ($scope, $http, CategoryCRUDService) {
+app.controller('CategoryCRUDCtrl', ['$scope', '$http', '$window', 'CategoryCRUDService', function ($scope, $http, $window, CategoryCRUDService) {
 	$http.get("api/categories")
 	.then(function (response) {$scope.categories = response.data;});
 	
@@ -8,8 +8,15 @@ app.controller('CategoryCRUDCtrl', ['$scope', '$http', 'CategoryCRUDService', fu
 	
 	$scope.selectCategory = function (id) {
 		$scope.category.id = id;
-		$scope.getCategory();
-		$scope.selected = $scope.category;
+		$scope.getCategory($scope.selected);
+	}
+	
+	$scope.saveCategory = function () {
+		if ($scope.category.id == null) {
+			$scope.addCategory();
+		} else {
+			$scope.updateCategory();
+		}
 	}
 	
     $scope.updateCategory = function () {
@@ -22,9 +29,10 @@ app.controller('CategoryCRUDCtrl', ['$scope', '$http', 'CategoryCRUDService', fu
               $scope.errorMessage = 'Error updating category!';
               $scope.message = '';
           });
+        $window.location.reload();
     }
     
-    $scope.getCategory = function () {
+    $scope.getCategory = function (destination) {
         var id = $scope.category.id;
         CategoryCRUDService.getCategory($scope.category.id)
           .then(function success(response){
@@ -60,19 +68,22 @@ app.controller('CategoryCRUDCtrl', ['$scope', '$http', 'CategoryCRUDService', fu
             $scope.errorMessage = 'Please enter a name!';
             $scope.message = '';
         }
+        $window.location.reload();
     }
     
-    $scope.deleteCategory = function () {
-        CategoryCRUDService.deleteCategory($scope.category.id)
+    $scope.deleteCategory = function (id, $index) {
+        CategoryCRUDService.deleteCategory(id)
           .then (function success(response){
               $scope.message = 'Category deleted!';
               $scope.category = null;
               $scope.errorMessage='';
+              document.getElementById("categoryTable").deleteRow($index);
           },
           function error(response){
               $scope.errorMessage = 'Error deleting category!';
               $scope.message='';
           })
+          $window.location.reload();
     }
     
     $scope.getAllCategories = function () {
@@ -116,9 +127,9 @@ app.service('CategoryCRUDService',['$http', function ($http) {
 	
     this.updateCategory = function updateCategory(id,name){
         return $http({
-          method: 'PUT',
+          method: 'POST',
           url: 'api/categories/'+id,
-          data: {name:name}
+          data: {id: id, name:name}
         })
     }
 	
