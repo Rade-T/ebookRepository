@@ -29,8 +29,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/user/me",
                         "/search/**").permitAll()
                 .antMatchers(HttpMethod.GET,
-                        "/category/**",
-                        "/language/**",
                         "/ebook/**").permitAll()
                 .antMatchers("/user").hasAuthority("administrator")
                 .anyRequest().authenticated()
