@@ -72,6 +72,22 @@ public class EbookController {
 		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{id}", method=RequestMethod.POST)
+	public ResponseEntity<String> updateEbook(@RequestBody EbookDTO ebookDTO, @PathVariable Long id) {
+		Ebook ebook = new Ebook();
+		ebook.setId(id);
+		ebook.setTitle(ebookDTO.getTitle());
+		ebook.setAuthor(ebookDTO.getAuthor());
+		ebook.setKeywords(ebookDTO.getKeywords());
+		ebook.setFilename(ebookDTO.getFilename());
+		ebook.setMIME(ebookDTO.getMIME());
+		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguerId()));
+		ebook.setCategory(categoryService.findOne(ebookDTO.getCategoryId()));
+		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguageId()));
+		ebookService.save(ebook);
+		return new ResponseEntity<>("Updated", HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		ebookService.delete(id);

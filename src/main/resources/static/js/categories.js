@@ -1,6 +1,12 @@
 var app = angular.module('cat-app', []);
+var token;
 
 app.controller('CategoryCRUDCtrl', ['$scope', '$http', '$window', 'CategoryCRUDService', function ($scope, $http, $window, CategoryCRUDService) {
+    token = localStorage.getItem('token');
+
+    // if (!token) {
+    //     window.location.replace("/index.html");
+    // }
 	$http.get("api/categories")
 	.then(function (response) {$scope.categories = response.data;});
 	
@@ -141,20 +147,6 @@ app.service('CategoryCRUDService',['$http', function ($http) {
     }
 
 }]);
-
-var token;
-
-$(document).ready(function () {
-
-    token = localStorage.getItem('token');
-
-    if (!token) {
-        window.location.replace("/index.html");
-    }
-
-    checkPrivs();
-
-});
 
 //$(document).ready(function (){
 //	$.ajax({

@@ -54,6 +54,16 @@ public class CategoryController {
 		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/{id}", method=RequestMethod.POST)
+	public ResponseEntity<String> updateCategory(@RequestBody CategoryDTO categoryDTO, @PathVariable Long id) {
+
+		Category category = new Category();
+		category.setId(id);
+		category.setName(categoryDTO.getName());
+		categoryService.save(category);
+		return new ResponseEntity<>("Saved", HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		categoryService.delete(id);

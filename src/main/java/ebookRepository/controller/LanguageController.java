@@ -54,6 +54,15 @@ public class LanguageController {
 		return new ResponseEntity<>("Saved", HttpStatus.OK);
 	}
 
+	@RequestMapping(value="/{id}", method=RequestMethod.POST)
+	public ResponseEntity<String> updateLanguage(@RequestBody LanguageDTO languageDTO, @PathVariable Long id) {
+		Language l = new Language();
+		l.setId(id);
+		l.setName(languageDTO.getName());
+		languageService.save(l);
+		return new ResponseEntity<>("Updated", HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(@PathVariable Long id) {
 		languageService.delete(id);

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ebookRepositoryFrontend</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <script src="assets/js/angular.min.js"></script>
+	<script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/languages.js"></script>
+</head>
+
+<body ng-app="lang-app">
+	<div ng-controller="LanguageCRUDCtrl">
+    <div>
+        <nav class="navbar navbar-default navigation-clean-button">
+            <div class="container">
+                <div class="navbar-header"><a class="navbar-brand" href="#">Jezici</a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+                <div
+                    class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav">
+                        <li class="active" role="presentation"><a id="newLanguageBtn" href="#">Novi jezik</a></li>
+                    </ul>
+                    <p class="navbar-text navbar-right actions"><a class="navbar-link login" href="#">Log In</a> </p>
+            </div>
+        </div>
+    </nav>
+    </div>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Novi jezik</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naziv</span><input ng-model="category.name" id="nameInput" class="form-control" type="text"></div><button ng-click="saveCategory()" id="addCategoryBtn" class="btn btn-default" type="button">Sacuvaj</button></form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Izmena jezika</h3>
+            </div>
+            <div class="panel-body">
+                <form>
+                    <div class="form-group"><span class="label label-default">Naziv</span><input ng-model="selected.name" class="form-control" type="text"></div><button class="btn btn-default" type="button">Izmeni</button></form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="categoryTable" class="table">
+                <thead>
+                    <tr>
+                        <th>Naziv</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryTableBody" ng-repeat="x in categories track by $index">
+                	<tr>
+                		<td>{{x.name}}</td>
+                		<td>
+                			<button ng-click="selectCategory(x.id)" type="button" class="btn btn-primary">Izmeni</button>
+                			<button ng-click="deleteCategory(x.id)" type="button" class="btn btn-danger">Obrisi</button>
+                		</td>
+                	</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div> <!--controller div -->
+</body>
+
+</html>

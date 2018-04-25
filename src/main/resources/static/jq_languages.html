@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ebookRepositoryFrontend</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
+    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+	<script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/jq_languages.js"></script>
+</head>
+
+<body>
+    <div>
+        <nav class="navbar navbar-default navigation-clean-button">
+            <div class="container">
+                <div class="navbar-header"><a class="navbar-brand" href="#">Jezici</a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+                    <div class="collapse navbar-collapse" id="navcol-1">
+                        <ul class="nav navbar-nav">
+                            <li class="active" role="presentation"><a id="newLanguageBtn" href="#">Novi jezik</a></li>
+                        </ul>
+                        <p class="navbar-text navbar-right actions"><a class="navbar-link login" href="#">Log In</a> </p>
+                    </div>
+                </div>
+        </nav>
+    </div>
+
+<div class="container">
+    <h1>Jezici</h1>
+
+	<table id="dataTable" class="table">
+
+		<tr class="header">
+			<th>Id</th>
+			<th>Naziv</th>
+		</tr>
+	</table>
+
+	<div class="panel">
+		<p>
+		<form id="editForm">
+			<input type="hidden" name="id" id="id" />
+			<p>
+				<label for="Id">Id</label> <input type="text" name="Id" id="Id" />
+				<span class="error"></span>
+			</p>
+
+			<p>
+				<label for="naziv">Nazivi</label> <input type="text" name="naziv"
+					id="naziv" /> <span class="error"></span>
+			</p>
+
+			<div id="formActions">
+				<input id="potvrda" type="button" value="Potvrda" style="margin-left: 6em">
+				<a id="rollback" href="#" style="margin-left: 6em">Rollback</a>
+			</div>
+		</form>
+    </div>
+</div>
+
+	<div class="modal" id="inputModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Novi jezik</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="inputForm">
+					<div class="modal-body">
+						<input type="hidden" name="id" id="id" />
+						<p>
+							<label for="Id">Id</label> <input type="text" name="Id"
+								id="Id" />
+						</p>
+						<p>
+							<label for="naziv">Naziv</label> <input type="text" name="naziv"
+								id="naziv" />
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Zatvori</button>
+						<button type="button" class="btn btn-primary" id="add">Potvrda</button>
+					</div>
+				</form>
+			</div>
+        </div>
+    </div>
+</body>
+
+</html>
