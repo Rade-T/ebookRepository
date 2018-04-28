@@ -39,22 +39,6 @@ $(document).ready(function() {
 				}
 			});
 	
-	$("#first").click(function(){
-		goFirst();
-	 });
-	
-	$("#last").click(function(){
-		goLast();
-	 });
-	
-	$("#next").click(function(){
-		goNext();
-	 });
-	
-	$("#prev").click(function(){
-		goPrevious();
-	 });
-	
 	$("#add").click(function(){
 		// pripremamo JSON koji cemo poslati
 			console.log("start");
