@@ -16,8 +16,8 @@ function highlightRow(row) {
 
 function sync(item){
 	id = item.find(".id").html()
-	naziv = item.find(".naziv").html()
-	$("#naziv").val(naziv);
+	name = item.find(".name").html()
+	$("#name").val(name);
 	$("#id").val(id);
 }
 
@@ -26,11 +26,12 @@ $(document).ready(function() {
 		url : "/api/languages/"})
 		.then(
 			function(data) {
+				console.log("Ucitiavanje jezika");
 				for (i = 0; i < data.length; i++) {
 					var newRow = "<tr>"
-					+ "<td class=\"Id\">" + data[i].id + "</td>"
-					+ "<td class=\"naziv\">" + data[i].naziv + "</td>"
-					+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data[i].id + "'>" 
+					+ "<td class=\"id\">" + data[i].id + "</td>"
+					+ "<td class=\"name\">" + data[i].name + "</td>"
+					+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data[i].id + "'>Obrisi" 
 					+ "</a></td>" +
 					+ "</tr>"
 					
@@ -58,7 +59,7 @@ $(document).ready(function() {
 		// pripremamo JSON koji cemo poslati
 			console.log("start");
 			formData = JSON.stringify({
-	            name :$("#inputForm [name='naziv']").val(),
+	            name :$("#inputForm [name='name']").val(),
 	        });
 			console.log(formData);
 			$.ajax({
@@ -70,9 +71,9 @@ $(document).ready(function() {
 				data: formData,
 				success: function(data) {
 					var newRow = "<tr>"
-						+ "<td class=\"Id\">" + data.id + "</td>"
-						+ "<td class=\"naziv\">" + data.naziv + "</td>"
-						+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data.id + "'>" 
+						+ "<td class=\"id\">" + data.id + "</td>"
+						+ "<td class=\"name\">" + data.name + "</td>"
+						+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data.id + "'>Obrisi"
 						+ "</a></td>" +
 						+ "</tr>"
 					
@@ -90,18 +91,18 @@ $(document).ready(function() {
 		event.preventDefault();
 		console.log("Kliknuta potvrda");
 		formData = JSON.stringify({
-            naziv :$("#editForm [name='naziv']").val(),
+            name :$("#editForm [name='name']").val(),
         });
 		$.ajax({
-			url: "http://localhost:8080/api/languages/" + $("#editForm [name='Id']").val(),
+			url: "/api/languages/" + $("#editForm [name='id']").val(),
 			type: "POST",
 			data: formData,
 			// saljemo json i ocekujemo json nazad
 			contentType: "application/json",
 			datatype: 'json',
 			success: function(data) {
-				$(".highlighted").find(".naziv")[0].innerHTML = data.naziv;
-				$(".highlighted").find(".Id")[0].innerHTML = data.id;
+				$(".highlighted").find(".name")[0].innerHTML = data.name;
+				$(".highlighted").find(".id")[0].innerHTML = $("#editForm [name='id']").val();
 			  },
 			error: function() {
 				console.log("Nije updateovao!")

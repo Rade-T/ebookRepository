@@ -25,7 +25,7 @@ public class LanguageController {
 	@Autowired
 	private LanguageService languageService;
 	
-	@RequestMapping(value="getLanguages", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<LanguageDTO>> getLanguages() {
 
 		List<Language> languages = languageService.findAll();
