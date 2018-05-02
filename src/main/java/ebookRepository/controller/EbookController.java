@@ -58,22 +58,23 @@ public class EbookController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<String> saveEbook(@RequestBody EbookDTO ebookDTO) {
+	public ResponseEntity<EbookDTO> saveEbook(@RequestBody EbookDTO ebookDTO) {
 		Ebook ebook = new Ebook();
 		ebook.setTitle(ebookDTO.getTitle());
 		ebook.setAuthor(ebookDTO.getAuthor());
 		ebook.setKeywords(ebookDTO.getKeywords());
 		ebook.setFilename(ebookDTO.getFilename());
 		ebook.setMIME(ebookDTO.getMIME());
-		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguerId()));
-		ebook.setCategory(categoryService.findOne(ebookDTO.getCategoryId()));
-		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguageId()));
+		ebook.setPublicationYear(ebookDTO.getPublicationYear());
+		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguer()));
+		ebook.setCategory(categoryService.findOne(ebookDTO.getCategory()));
+		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguage()));
 		ebookService.save(ebook);
-		return new ResponseEntity<>("Saved", HttpStatus.OK);
+		return new ResponseEntity<>(new EbookDTO(ebook), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method=RequestMethod.POST)
-	public ResponseEntity<String> updateEbook(@RequestBody EbookDTO ebookDTO, @PathVariable Long id) {
+	public ResponseEntity<EbookDTO> updateEbook(@RequestBody EbookDTO ebookDTO, @PathVariable Long id) {
 		Ebook ebook = new Ebook();
 		ebook.setId(id);
 		ebook.setTitle(ebookDTO.getTitle());
@@ -81,11 +82,12 @@ public class EbookController {
 		ebook.setKeywords(ebookDTO.getKeywords());
 		ebook.setFilename(ebookDTO.getFilename());
 		ebook.setMIME(ebookDTO.getMIME());
-		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguerId()));
-		ebook.setCategory(categoryService.findOne(ebookDTO.getCategoryId()));
-		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguageId()));
+        ebook.setPublicationYear(ebookDTO.getPublicationYear());
+		ebook.setCataloguer(userService.findOne(ebookDTO.getCataloguer()));
+		ebook.setCategory(categoryService.findOne(ebookDTO.getCategory()));
+		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguage()));
 		ebookService.save(ebook);
-		return new ResponseEntity<>("Updated", HttpStatus.OK);
+		return new ResponseEntity<>(new EbookDTO(ebook), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

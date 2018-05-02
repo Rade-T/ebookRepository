@@ -42,6 +42,10 @@
             <th>Naslov</th>
             <th>Autor</th>
             <th>Godina izdanja</th>
+            <th>Kljucne reci</th>
+            <th>Jezik</th>
+            <th>Kategorija</th>
+            <th>Kataloger</th>
         </table>
     </div>
 
@@ -69,9 +73,34 @@
             </div>
 
             <div class="form-group">
+                <label for="keywords">Kljucne reci</label>
+                <input type="text" class="form-control" name="keywords"
+                       id="keywords"/>
+                <span class="error"></span>
+            </div>
+
+            <div class="form-group">
                 <label for="year">Godina izdanja</label>
-                <input type="date" class="form-control" name="year"
+                <input type="text" class="form-control" name="year"
                        id="year"/>
+                <span class="error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="language">Jezik</label>
+                <select name="language" id="language"></select>
+                <span class="error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="category">Kategorija</label>
+                <select name="category" id="category"></select>
+                <span class="error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="cataloguer">Kataloger</label>
+                <select name="cataloguer" id="cataloguer"></select>
                 <span class="error"></span>
             </div>
 
@@ -99,15 +128,35 @@
                     <input type="hidden" name="id" id="id"/>
                     <p>
                         <label for="title">Naslov</label> <input class="form-control" type="text" name="title"
-                                                               id="title"/>
+                                                                 id="title"/>
                     </p>
                     <p>
                         <label for="author">Autor</label> <input class="form-control" type="text" name="author"
-                                                               id="author"/>
+                                                                 id="author"/>
                     </p>
                     <p>
-                        <label for="year">Godina izdanja</label> <input class="form-control" type="date" name="year"
-                                                               id="year"/>
+                        <label for="keywords">Kljucne reci</label> <input class="form-control" type="text"
+                                                                          name="keywords"
+                                                                          id="keywords"/>
+                    </p>
+                    <p>
+                        <label for="year">Godina izdanja</label> <input class="form-control" type="text" name="year"
+                                                                        id="year"/>
+                    </p>
+                    <p>
+                        <label for="languageSelect">Jezik</label>
+                        <select id="languageSelect" name="languageSelect">
+                        </select>
+                    </p>
+                    <p>
+                        <label for="categorySelect">Kategorija</label>
+                        <select id="categorySelect" name="categorySelect">
+                        </select>
+                    </p>
+                    <p>
+                        <label for="cataloguerSelect">Kataloger</label>
+                        <select id="cataloguerSelect" name="cataloguerSelect">
+                        </select>
                     </p>
                 </div>
                 <div class="modal-footer">

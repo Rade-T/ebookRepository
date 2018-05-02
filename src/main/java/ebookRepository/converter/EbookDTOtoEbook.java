@@ -29,13 +29,11 @@ public class EbookDTOtoEbook implements Converter<EbookDTO, Ebook> {
 		e.setId(arg0.getId());
 		e.setAuthor(arg0.getAuthor());
 		e.setFilename(arg0.getFilename());
-		e.setTitle(arg0.getTitle());
-		e.setLanguage( languageService.findOne(arg0.getLanguageId()) );
+
 		e.setKeywords(arg0.getKeywords());
 		e.setMIME(arg0.getMIME());
 		e.setPublicationYear(arg0.getPublicationYear());
-		e.setCataloguer( userService.findOne(arg0.getCataloguerId()) );
-		e.setCategory( categoryService.findOne(arg0.getCategoryId()) );
+
 		return e;
 	}
 	

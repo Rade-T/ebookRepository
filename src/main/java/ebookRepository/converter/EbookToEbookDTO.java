@@ -20,9 +20,6 @@ public class EbookToEbookDTO implements Converter<Ebook, EbookDTO> {
 		e.setTitle(arg0.getTitle());
 		e.setMIME(arg0.getMIME());
 		e.setPublicationYear(arg0.getPublicationYear());
-		e.setCataloguerId( arg0.getCataloguer().getId() );
-		e.setCategoryId( arg0.getCategory().getId() );
-		e.setLanguageId( arg0.getLanguage().getId() );
 		return e;
 	}
 	

@@ -26,8 +26,8 @@ public class Ebook {
 	@Column(name="keywords", columnDefinition="varchar(120)")
 	private String keywords;
 	
-	@Column(name="PublicationYear", columnDefinition="int")
-	private int publicationYear;
+	@Column(name="PublicationYear", columnDefinition="varchar(11)")
+	private String publicationYear;
 	
 	@Column(name="Filename", columnDefinition="varchar(200)")
 	private String filename;
@@ -68,10 +68,10 @@ public class Ebook {
 	public void setKeywords(String keywords) {
 		this.keywords = keywords;
 	}
-	public int getPublicationYear() {
+	public String getPublicationYear() {
 		return publicationYear;
 	}
-	public void setPublicationYear(int publicationYear) {
+	public void setPublicationYear(String publicationYear) {
 		this.publicationYear = publicationYear;
 	}
 	public String getFilename() {

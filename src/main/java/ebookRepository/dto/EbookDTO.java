@@ -12,19 +12,19 @@ public class EbookDTO {
 
 	private String keywords;
 
-	private int publicationYear;
+	private String publicationYear;
 
 	private String filename;
 
 	private String MIME;
 
-	private long languageId;
+	private long language;
 
-	private long categoryId;
+	private long category;
 
-	private long cataloguerId;
+	private long cataloguer;
 
-	public EbookDTO(long id, String title, String author, String keywords, int publicationYear, String filename,
+	public EbookDTO(long id, String title, String author, String keywords, String publicationYear, String filename,
 			String mIME, long languageId, long categoryId, long cataloguerId) {
 		super();
 		this.id = id;
@@ -34,9 +34,9 @@ public class EbookDTO {
 		this.publicationYear = publicationYear;
 		this.filename = filename;
 		MIME = mIME;
-		this.languageId = languageId;
-		this.categoryId = categoryId;
-		this.cataloguerId = cataloguerId;
+		this.language = languageId;
+		this.category = categoryId;
+		this.cataloguer = cataloguerId;
 	}
 	
 	public EbookDTO(Ebook e) {
@@ -47,9 +47,9 @@ public class EbookDTO {
 		this.publicationYear = e.getPublicationYear();
 		this.filename = e.getFilename();
 		this.MIME = e.getMIME();
-		this.languageId = e.getLanguage().getId();
-		this.categoryId = e.getCategory().getId();
-		this.cataloguerId = e.getCataloguer().getId();
+		this.language = e.getLanguage().getId();
+		this.category = e.getCategory().getId();
+		this.cataloguer = e.getCataloguer().getId();
 	}
 
 	public EbookDTO() {
@@ -87,11 +87,11 @@ public class EbookDTO {
 		this.keywords = keywords;
 	}
 
-	public int getPublicationYear() {
+	public String getPublicationYear() {
 		return publicationYear;
 	}
 
-	public void setPublicationYear(int publicationYear) {
+	public void setPublicationYear(String publicationYear) {
 		this.publicationYear = publicationYear;
 	}
 
@@ -111,27 +111,27 @@ public class EbookDTO {
 		MIME = mIME;
 	}
 
-	public long getLanguageId() {
-		return languageId;
+	public long getLanguage() {
+		return language;
 	}
 
-	public void setLanguageId(long languageId) {
-		this.languageId = languageId;
+	public void setLanguage(long languageId) {
+		this.language = languageId;
 	}
 
-	public long getCategoryId() {
-		return categoryId;
+	public long getCategory() {
+		return category;
 	}
 
-	public void setCategoryId(long categoryId) {
-		this.categoryId = categoryId;
+	public void setCategory(long categoryId) {
+		this.category = categoryId;
 	}
 
-	public long getCataloguerId() {
-		return cataloguerId;
+	public long getCataloguer() {
+		return cataloguer;
 	}
 
-	public void setCataloguerId(long cataloguerId) {
-		this.cataloguerId = cataloguerId;
+	public void setCataloguer(long cataloguerId) {
+		this.cataloguer = cataloguerId;
 	}
 }
