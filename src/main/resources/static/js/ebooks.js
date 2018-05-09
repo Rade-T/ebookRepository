@@ -39,7 +39,7 @@ $(document).ready(function() {
         })
         .then(
             function(data) {
-                console.log("Ucitiavanje knjiga");
+                console.log("Ucitavanje knjiga");
                 for (i = 0; i < data.length; i++) {
                     var newRow = "<tr>" +
                         "<td class=\"id\">" + data[i].id + "</td>" +
@@ -52,7 +52,9 @@ $(document).ready(function() {
 						"<td class=\"cataloguer\">" + data[i].cataloguer + "</td>" +
                         "<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data[i].id + "'>Obrisi" +
                         "</a></td>" +
-                        +"</tr>"
+                        "<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data[i].filename + "'>Preuzmi" +
+                        "</a></td>" +
+                        "</tr>"
 
                     $("#dataTable").append(newRow)
                 }
@@ -138,8 +140,8 @@ $(document).ready(function() {
                 });
     });
 
-    $("#add").click(function() {
-        // pripremamo JSON koji cemo poslati
+    $("#add").on('click', function(event) {
+        event.preventDefault();
         console.log("start");
         formData = JSON.stringify({
             author: $("#inputForm [name='author']").val(),
@@ -149,27 +151,48 @@ $(document).ready(function() {
             language: $("#languageSelect").val(),
             cataloguer: $("#inputForm [name='cataloguerSelect']").val(),
             category: $("#inputForm [name='categorySelect']").val(),
-            MIME: "",
+            filename: $("#pdf")[0].files[0].name,
+            MIME: ""
         });
         console.log(formData);
+        var fileData = new FormData();
+        fileData.append('file', $('#pdf')[0].files[0]);
         $.ajax({
-            url: "/api/ebooks/",
+            url: "/api/ebooks/uploadFile/",
             type: "POST",
-            // saljemo json i ocekujemo json nazad
-            contentType: "application/json",
-            datatype: 'json',
-            data: formData,
+            contentType: false,
+            processData: false,
+            data: fileData,
             success: function(data) {
-                var newRow = "<tr>" +
-                    "<td class=\"id\">" + data.id + "</td>" +
-                    "<td class=\"title\">" + data.title + "</td>" +
-                    "<td class=\"author\">" + data.author + "</td>" +
-                    "<td class=\"year\">" + data.publicationYear + "</td>" +
-                    "<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data.id + "'>Obrisi" +
-                    "</a></td>" +
-                    +"</tr>"
-
-                $("#dataTable").append(newRow)
+                console.log("File uploaded!");
+                $.ajax({
+                    url: "/api/ebooks/",
+                    type: "POST",
+                    contentType: "application/json",
+                    datatype: 'json',
+                    data: formData,
+                    success: function(data) {
+                        var newRow = "<tr>" +
+                            "<td class=\"id\">" + data.id + "</td>" +
+                            "<td class=\"title\">" + data.title + "</td>" +
+                            "<td class=\"author\">" + data.author + "</td>" +
+                            "<td class=\"year\">" + data.publicationYear + "</td>" +
+                            "<td class=\"keywords\">" + data.keywords + "</td>" +
+                            "<td class=\"language\">" + data.language + "</td>" +
+                            "<td class=\"category\">" + data.category + "</td>" +
+                            "<td class=\"cataloguer\">" + data.cataloguer + "</td>" +
+                            "<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data.id + "'>Obrisi" +
+                            "</a></td>" +
+                            "<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data.filename + "'>Preuzmi" +
+                            "</a></td>" +
+                            "</tr>"
+        
+                        $("#dataTable").append(newRow)
+                    },
+                    error: function(data) {
+                        console.log(data.getResponseHeader());
+                    }
+                });
             },
             error: function(data) {
                 console.log(data.getResponseHeader());

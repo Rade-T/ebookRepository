@@ -5,8 +5,8 @@ import static ebookRepository.lucene.Constants.luceneDir;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
+import org.apache.pdfbox.io.RandomAccessFile;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
@@ -19,7 +19,6 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.SimpleFSDirectory;
-import org.apache.pdfbox.io.RandomAccessRead;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.text.PDFTextStripper;
 
@@ -39,8 +38,8 @@ public class Indexer {
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 
         try (IndexWriter indexWriter = new IndexWriter(directory, config)) {
-            //PDFParser parser = new PDFParser(new RandomAccessFile(file, "r"));
-        	PDFParser parser = new PDFParser((RandomAccessRead) new RandomAccessFile(file, "r"));
+            PDFParser parser = new PDFParser(new RandomAccessFile(file, "r"));
+//        	PDFParser parser = new PDFParser((RandomAccessRead) new RandomAccessFile(file, "r"));
             parser.parse();
             PDFTextStripper textStripper = new PDFTextStripper();
             String content = textStripper.getText(parser.getPDDocument());
