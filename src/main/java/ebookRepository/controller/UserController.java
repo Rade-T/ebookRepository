@@ -4,9 +4,20 @@ import ebookRepository.dto.UserDTO;
 import ebookRepository.model.User;
 import ebookRepository.service.CategoryService;
 import ebookRepository.service.UserService;
+import ebookRepository.security.AuthenticationFacade;
+import ebookRepository.security.TokenUtils;
+import ebookRepository.dto.LoginDTO;
+import ebookRepository.dto.TokenDTO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +33,54 @@ public class UserController {
 	@Autowired
     private CategoryService categoryService;
 	
+	@Autowired
+	AuthenticationManager authenticationManager;
+	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+	TokenUtils tokenUtils;
+	
+	@Autowired
+	private AuthenticationFacade authenticationFacade;
+
+	
+	@RequestMapping(value = "/login", method=RequestMethod.POST)
+	public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
+
+		try {
+			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+					loginDTO.getUsername(), loginDTO.getPassword());
+            Authentication authentication = authenticationManager.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails details = userDetailsService.loadUserByUsername(loginDTO.getUsername());
+            String genToken = tokenUtils.generateToken(details);
+            return new ResponseEntity<TokenDTO>(new TokenDTO(genToken), 
+            		HttpStatus.OK);
+        } catch (Exception ex) {
+        	System.out.println(ex.getStackTrace());
+            return new ResponseEntity<TokenDTO>(new TokenDTO(""), HttpStatus.BAD_REQUEST);
+        }
+	}
+	
+	@RequestMapping(value = "/role", method = RequestMethod.GET)
+	public ResponseEntity<String> role() {
+//		Object[] authorities = authentication.getAuthorities().toArray();
+//		String role = "spectator";
+//		if (authorities.length > 0) {
+//			role = authorities[0].toString();
+//		}
+		Authentication authentication = authenticationFacade.getAuthentication();
+		Object[] authorities = authentication.getAuthorities().toArray();
+		String role = "spectator";
+		System.out.println(authorities[0].toString());
+		if (authorities.length > 0) {
+			role = authorities[0].toString();
+		}
+		return new ResponseEntity<>(role, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public ResponseEntity<List<UserDTO>> getUsers() {
         List<User> users = userService.findAll();
@@ -35,9 +94,9 @@ public class UserController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
 		UserDTO user = new UserDTO(userService.findOne(id));
-		if (user == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+//		if (user == null) {
+//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//		}
 
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
