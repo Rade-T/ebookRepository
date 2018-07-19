@@ -66,15 +66,9 @@ public class UserController {
 	
 	@RequestMapping(value = "/role", method = RequestMethod.GET)
 	public ResponseEntity<String> role() {
-//		Object[] authorities = authentication.getAuthorities().toArray();
-//		String role = "spectator";
-//		if (authorities.length > 0) {
-//			role = authorities[0].toString();
-//		}
 		Authentication authentication = authenticationFacade.getAuthentication();
 		Object[] authorities = authentication.getAuthorities().toArray();
 		String role = "spectator";
-		System.out.println(authorities[0].toString());
 		if (authorities.length > 0) {
 			role = authorities[0].toString();
 		}
@@ -108,9 +102,8 @@ public class UserController {
 		newUser.setFirstname(userDTO.getFirstname());
 		newUser.setLastname(userDTO.getLastname());
 		newUser.setPassword(userDTO.getPassword());
-		newUser.setType(userDTO.getType());
 		newUser.setUsername(userDTO.getUsername());
-		newUser.setCategory(categoryService.findOne(userDTO.getCategoryId()));
+		//newUser.setCategory(categoryService.findOne(userDTO.getCategoryId()));
 
 		userDTO = new UserDTO(userService.save(newUser));
 		return new ResponseEntity<>(userDTO, HttpStatus.OK);

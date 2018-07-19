@@ -51,7 +51,7 @@ public class LanguageController {
 		Language l = new Language();
 		l.setName(languageDTO.getName());
 		languageService.save(l);
-		return new ResponseEntity<>(languageDTO, HttpStatus.OK);
+		return new ResponseEntity<>(new LanguageDTO(l), HttpStatus.OK);
 	}
 
 	@RequestMapping(value="/{id}", method=RequestMethod.POST)
@@ -60,7 +60,7 @@ public class LanguageController {
 		l.setId(id);
 		l.setName(languageDTO.getName());
 		languageService.save(l);
-		return new ResponseEntity<>(languageDTO, HttpStatus.OK);
+		return new ResponseEntity<>(new LanguageDTO(l), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

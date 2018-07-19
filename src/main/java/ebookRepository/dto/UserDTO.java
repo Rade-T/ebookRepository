@@ -18,16 +18,15 @@ public class UserDTO {
 
 	private long categoryId;
 
-	public UserDTO(long id, String firstname, String lastname, String username, String password, String type,
-			long categoryId) {
+	public UserDTO(long id, String firstname, String lastname, String username, String password) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.username = username;
 		this.password = password;
-		this.type = type;
-		this.categoryId = categoryId;
+		//this.type = type;
+		//this.categoryId = categoryId;
 	}
 	
 	public UserDTO(User u) {
@@ -36,8 +35,8 @@ public class UserDTO {
 		this.lastname = u.getLastname();
 		this.username = u.getUsername();
 		this.password = u.getPassword();
-		this.type = u.getType();
-		this.categoryId = u.getCategory().getId();
+		//this.type = u.getType();
+		//this.categoryId = u.getCategory().getId();
 	}
 
 	public UserDTO() {

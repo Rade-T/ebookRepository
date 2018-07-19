@@ -50,18 +50,18 @@ $(document).ready(function() {
     	});
     }
 	$.ajax({
-		url : "/api/languages/",
+		url : "/api/categories/",
 		type: "GET",
 		beforeSend: function (request) {
             request.setRequestHeader("X-Auth-Token", token);
     	},
 		success: function(data) {
-			console.log("Ucitiavanje jezika");
+			console.log("Ucitiavanje kategorija");
 			for (i = 0; i < data.length; i++) {
 				var newRow = "<tr>"
 					+ "<td class=\"id\">" + data[i].id + "</td>"
 					+ "<td class=\"name\">" + data[i].name + "</td>"
-					+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data[i].id + "'>Obrisi" 
+					+ "<td><a class=\"remove btn btn-danger\" href='/api/categories/" + data[i].id + "'>Obrisi" 
 					+ "</a></td>" +
 					+ "</tr>"
 
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	        });
 			console.log(formData);
 			$.ajax({
-				url: "/api/languages/",
+				url: "/api/categories/",
 				type: "POST",
 				// saljemo json i ocekujemo json nazad
 				contentType: "application/json",
@@ -92,7 +92,7 @@ $(document).ready(function() {
 					var newRow = "<tr>"
 						+ "<td class=\"id\">" + data.id + "</td>"
 						+ "<td class=\"name\">" + data.name + "</td>"
-						+ "<td><a class=\"remove btn btn-danger\" href='/api/languages/" + data.id + "'>Obrisi"
+						+ "<td><a class=\"remove btn btn-danger\" href='/api/categories/" + data.id + "'>Obrisi"
 						+ "</a></td>" +
 						+ "</tr>"
 					
@@ -113,7 +113,7 @@ $(document).ready(function() {
             name :$("#editForm [name='name']").val(),
         });
 		$.ajax({
-			url: "/api/languages/" + $("#editForm [name='id']").val(),
+			url: "/api/categories/" + $("#editForm [name='id']").val(),
 			type: "POST",
 			data: formData,
 			// saljemo json i ocekujemo json nazad
@@ -129,7 +129,7 @@ $(document).ready(function() {
 			error: function() {
 				console.log("Nije updateovao!")
 			}
-		});
+			});
 	});
 	
 	$("#rollback").click(function(event){
