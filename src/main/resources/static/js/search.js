@@ -19,7 +19,7 @@ $(document).ready(function() {
     
         var type = $("input[name='searchType']:checked").val();
     
-        var data = {
+        var formData = {
             "title": {
                 "value": title,
                 "searchType": titleCb
@@ -46,17 +46,36 @@ $(document).ready(function() {
         $.ajax({
             type: "POST",
             url: "/api/search",
-            data: JSON.stringify(data),
+            data: JSON.stringify(formData),
             contentType: "application/json",
-            success: function (response) {
+            success: function (data) {
                 console.log("Uspela pretraga");
-                //var lista = groupBy(response);
-                console.log(response);
-                //console.log(lista);
+                console.log(data);
+                $("#dataTable tbody tr").remove(); 
+                
+                for (i = 0; i < data.length; i++) {
+        			var newRow = "<tr>" +
+        			"<td class=\"id\">" + data[i].id + "</td>" +
+        			"<td class=\"title\">" + data[i].title + "</td>" +
+        			"<td class=\"author\">" + data[i].author + "</td>" +
+        			"<td class=\"year\">" + data[i].publicationYear + "</td>" +
+        			"<td class=\"keywords\">" + data[i].keywords + "</td>" +
+        			"<td class=\"language\">" + data[i].language + "</td>" +
+        			"<td class=\"category\">" + data[i].category + "</td>" +
+        			"<td class=\"cataloguer\">" + data[i].cataloguer + "</td>" +
+//        			"<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data[i].id + "'>Obrisi" +
+//        			"</a></td>" +
+        			"<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data[i].filename + "'>Preuzmi" +
+        			"</a></td>" +
+        			"<input class=\"filename\" type=\"hidden\" value=\"" + data[i].filename + "\"></input>" +
+        			"</tr>"
+
+        			$("#dataTable tbody").append(newRow)
+        		}
             },
             error: function (err) {
                 var json = err.responseJSON;
-                console.log("Pretraga nije uspela");
+                console.log(json);
             }
         });
     

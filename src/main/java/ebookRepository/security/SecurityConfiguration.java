@@ -63,6 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.authorizeRequests() // bez logovanja dostupni samo servisi login
 				.antMatchers("/api/users/login").permitAll()
 				.antMatchers("/api/users/role").permitAll()
+				.antMatchers("/api/search").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/**").permitAll()
 				.antMatchers(HttpMethod.POST, "/api/**").hasAuthority("ROLE_ADMINISTRATOR")
 				.antMatchers(HttpMethod.DELETE, "/api/**").hasAuthority("ROLE_ADMINISTRATOR")

@@ -10,22 +10,27 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import ebookRepository.lucene.Indexer;
-import ebookRepository.service.*;
+import javax.persistence.Index;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import ebookRepository.dto.EbookDTO;
-import ebookRepository.model.Ebook;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletResponse;
+import ebookRepository.dto.EbookDTO;
+import ebookRepository.lucene.Indexer;
+import ebookRepository.model.Ebook;
+import ebookRepository.service.CategoryService;
+import ebookRepository.service.EbookService;
+import ebookRepository.service.LanguageService;
+import ebookRepository.service.UserService;
 
 @RestController
 @RequestMapping("/api/ebooks")
@@ -51,7 +56,6 @@ public class EbookController {
 		List<Ebook> ebooks = ebookService.findAll();
 		List<EbookDTO> ebooksDTO = new ArrayList<>();
 		for (Ebook ebook : ebooks) {
-		    Indexer.addFileToIndex(ebook);
 			ebooksDTO.add(new EbookDTO(ebook));
 		}
 
@@ -69,7 +73,7 @@ public class EbookController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<EbookDTO> saveEbook(@RequestBody EbookDTO ebookDTO) {
+	public ResponseEntity<EbookDTO> saveEbook(@RequestBody EbookDTO ebookDTO) throws IOException {
 		Ebook ebook = new Ebook();
 		ebook.setTitle(ebookDTO.getTitle());
 		ebook.setAuthor(ebookDTO.getAuthor());
@@ -81,6 +85,7 @@ public class EbookController {
 		ebook.setCategory(categoryService.findOne(ebookDTO.getCategory()));
 		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguage()));
 		ebookService.save(ebook);
+		Indexer.addFileToIndex(ebook);
 		return new ResponseEntity<>(new EbookDTO(ebook), HttpStatus.OK);
 	}
 
@@ -98,7 +103,7 @@ public class EbookController {
 		ebook.setCategory(categoryService.findOne(ebookDTO.getCategory()));
 		ebook.setLanguage(languageService.findOne(ebookDTO.getLanguage()));
 		ebookService.save(ebook);
-        Indexer.addFileToIndex(ebook);
+        //Indexer.addFileToIndex(ebook);
 		return new ResponseEntity<>(new EbookDTO(ebook), HttpStatus.OK);
 	}
 
@@ -118,7 +123,7 @@ public class EbookController {
 //    }
 
     @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ResponseEntity handleFileUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file) {
 
         try {
             // Get the file and save it somewhere
@@ -128,7 +133,7 @@ public class EbookController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>("File uploaded", HttpStatus.OK);
     }
 
     @RequestMapping(value = "/downloadFile/{filename}", method = RequestMethod.GET)
@@ -144,6 +149,7 @@ public class EbookController {
             while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
                 outputStream.write(data, 0, nRead);
             }
+            inputStream.close();
         };
     }
 }

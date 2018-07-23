@@ -1,3 +1,6 @@
+var token;
+var role;
+
 function highlightRow(row) {
     // ne reagujemo na klik na header tabele, samo obicne redove
     // this sadrzi red na koji se kliknulo
@@ -23,6 +26,7 @@ function sync(item) {
 	language = item.find(".language").html();
 	cataloguer = item.find(".cataloguer").html();
 	category = item.find(".category").html();
+	filename = item.find(".filename").val();
     $("#id").val(id);
     $("#title").val(title);
     $("#author").val(author);
@@ -31,113 +35,162 @@ function sync(item) {
 	$("#language").val(language);
 	$("#cataloguer").val(cataloguer);
 	$("#category").val(category);
+	$("#filename").val(filename);
 }
 
 $(document).ready(function() {
+	token = localStorage.getItem('token');
+	if (!token) {
+        $("#logoutLink").remove();
+        $("#newLanguageItem").remove();
+        $("#editBookPanel").remove();
+    } else {
+    	$("#loginLink").remove();
+    	$.ajax({
+    		url: "http://localhost:8080/api/users/role",
+    		type: "GET",
+    		beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
+    		success: function(data) {
+    			console.log(data);
+    			role = data;
+    			if (role == "ROLE_SUBSCRIBER") {
+    		        $("#newLanguageItem").remove();
+    		        $("#editBookPanel").remove();
+    			}
+    		},
+    		error: function(error) {
+    			console.log(error);
+    		}
+    	});
+    }
     $.ajax({
-            url: "/api/ebooks/"
-        })
-        .then(
-            function(data) {
-                console.log("Ucitavanje knjiga");
-                for (i = 0; i < data.length; i++) {
-                    var newRow = "<tr>" +
-                        "<td class=\"id\">" + data[i].id + "</td>" +
-                        "<td class=\"title\">" + data[i].title + "</td>" +
-						"<td class=\"author\">" + data[i].author + "</td>" +
-						"<td class=\"year\">" + data[i].publicationYear + "</td>" +
-						"<td class=\"keywords\">" + data[i].keywords + "</td>" +
-						"<td class=\"language\">" + data[i].language + "</td>" +
-						"<td class=\"category\">" + data[i].category + "</td>" +
-						"<td class=\"cataloguer\">" + data[i].cataloguer + "</td>" +
-                        "<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data[i].id + "'>Obrisi" +
-                        "</a></td>" +
-                        "<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data[i].filename + "'>Preuzmi" +
-                        "</a></td>" +
-                        "</tr>"
+    	url: "/api/ebooks/",
+    	type: "GET",
+		beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+    	success: function(data) {
+    		console.log("Ucitavanje knjiga");
+    		for (i = 0; i < data.length; i++) {
+    			var newRow = "<tr>" +
+    			"<td class=\"id\">" + data[i].id + "</td>" +
+    			"<td class=\"title\">" + data[i].title + "</td>" +
+    			"<td class=\"author\">" + data[i].author + "</td>" +
+    			"<td class=\"year\">" + data[i].publicationYear + "</td>" +
+    			"<td class=\"keywords\">" + data[i].keywords + "</td>" +
+    			"<td class=\"language\">" + data[i].language + "</td>" +
+    			"<td class=\"category\">" + data[i].category + "</td>" +
+    			"<td class=\"cataloguer\">" + data[i].cataloguer + "</td>" +
+    			"<td><a class=\"remove btn btn-danger\" href='/api/ebooks/" + data[i].id + "'>Obrisi" +
+    			"</a></td>" +
+    			"<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data[i].filename + "'>Preuzmi" +
+    			"</a></td>" +
+    			"<input class=\"filename\" type=\"hidden\" value=\"" + data[i].filename + "\"></input>" +
+    			"</tr>"
 
-                    $("#dataTable").append(newRow)
-                }
-			});
-			
-			$.ajax({
-                url: "/api/categories"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo kategorije")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].name + '</option>';
-                        $("#category").append(newOption);
-                    }
-                });
+    			$("#dataTable").append(newRow)
+    		}
+    	}
+    });
 
-        $.ajax({
-                url: "/api/languages"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo jezike")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].name + '</option>';
-                        $("#language").append(newOption);
-                    }
-                });
+    $.ajax({
+    	url: "/api/categories",
+    	type: "GET",
+		beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+    	success: function(data) {
+    		console.log("Uspeo kategorije")
+    		for (i = 0; i < data.length; i++) {
+    			var newOption = '<option value="' + data[i].id + '">' +
+    			data[i].name + '</option>';
+    			$("#category").append(newOption);
+    		}
+    	}
+    });
 
-        $.ajax({
-                url: "/api/users"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo korisnike")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].username + '</option>';
-                        $("#cataloguer").append(newOption);
-                    }
-                });
+    $.ajax({
+    	url: "/api/languages",
+    	type: "GET",
+		beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+    	success: function(data) {
+    		console.log("Uspeo jezike")
+    		for (i = 0; i < data.length; i++) {
+    			var newOption = '<option value="' + data[i].id + '">' +
+    			data[i].name + '</option>';
+    			$("#language").append(newOption);
+    		}
+    	}
+    });
+
+    $.ajax({
+    	url: "/api/users",
+    	type: "GET",
+		beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+    	success: function(data) {
+    		console.log("Uspeo korisnike")
+    		for (i = 0; i < data.length; i++) {
+    			var newOption = '<option value="' + data[i].id + '">' +
+    			data[i].username + '</option>';
+    			$("#cataloguer").append(newOption);
+    		}
+    	}
+    });
 
     $('#inputModal').on('shown.bs.modal', function(e) {
-        $.ajax({
-                url: "/api/categories"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo kategorije")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].name + '</option>';
-                        $("#categorySelect").append(newOption);
-                    }
-                });
+    	$.ajax({
+    		url: "/api/categories",
+    		type: "GET",
+    		beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
+    		success: function(data) {
+    			console.log("Uspeo kategorije")
+    			for (i = 0; i < data.length; i++) {
+    				var newOption = '<option value="' + data[i].id + '">' +
+    				data[i].name + '</option>';
+    				$("#categorySelect").append(newOption);
+    			}
+    		}
+    	});
 
-        $.ajax({
-                url: "/api/languages"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo jezike")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].name + '</option>';
-                        $("#languageSelect").append(newOption);
-                    }
-                });
+    	$.ajax({
+    		url: "/api/languages",
+    		type: "GET",
+    		beforeSend: function (request) {
+    			request.setRequestHeader("X-Auth-Token", token);
+    		},
+    		success: function(data) {
+    			console.log("Uspeo jezike")
+    			for (i = 0; i < data.length; i++) {
+    				var newOption = '<option value="' + data[i].id + '">' +
+    				data[i].name + '</option>';
+    				$("#languageSelect").append(newOption);
+    			}
+    		}
+    	});
 
-        $.ajax({
-                url: "/api/users"
-            })
-            .then(
-                function(data) {
-                    console.log("Uspeo korisnike")
-                    for (i = 0; i < data.length; i++) {
-                        var newOption = '<option value="' + data[i].id + '">' +
-                            data[i].username + '</option>';
-                        $("#cataloguerSelect").append(newOption);
-                    }
-                });
+    	$.ajax({
+    		url: "/api/users",
+    		type: "GET",
+    		beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
+    		success: function(data) {
+    			console.log("Uspeo korisnike")
+    			for (i = 0; i < data.length; i++) {
+    				var newOption = '<option value="' + data[i].id + '">' +
+    				data[i].username + '</option>';
+    				$("#cataloguerSelect").append(newOption);
+    			}
+    		}
+    	});
     });
 
     $("#add").on('click', function(event) {
@@ -163,6 +216,9 @@ $(document).ready(function() {
             contentType: false,
             processData: false,
             data: fileData,
+    		beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
             success: function(data) {
                 console.log("File uploaded!");
                 $.ajax({
@@ -171,6 +227,9 @@ $(document).ready(function() {
                     contentType: "application/json",
                     datatype: 'json',
                     data: formData,
+                    beforeSend: function (request) {
+                        request.setRequestHeader("X-Auth-Token", token);
+                	},
                     success: function(data) {
                         var newRow = "<tr>" +
                             "<td class=\"id\">" + data.id + "</td>" +
@@ -185,6 +244,7 @@ $(document).ready(function() {
                             "</a></td>" +
                             "<td><a class=\"download btn\" href='/api/ebooks/downloadFile/" + data.filename + "'>Preuzmi" +
                             "</a></td>" +
+                            "<input class=\"filename\" type=\"hidden\" value=\"" + data.filename + "\"></input>" +
                             "</tr>"
         
                         $("#dataTable").append(newRow)
@@ -213,15 +273,19 @@ $(document).ready(function() {
             language: $("#editForm [name='language']").val(),
             cataloguer: $("#editForm  [name='cataloguer']").val(),
             category: $("#editForm  [name='category']").val(),
+            filename: $("#filename").val(),
             MIME: "",
         });
+		console.log(formData);
         $.ajax({
             url: "/api/ebooks/" + $("#editForm [name='id']").val(),
             type: "POST",
             data: formData,
-            // saljemo json i ocekujemo json nazad
             contentType: "application/json",
             datatype: 'json',
+            beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
             success: function(data) {
                 $(".highlighted").find(".title")[0].innerHTML = data.title;
                 $(".highlighted").find(".author")[0].innerHTML = data.author;
@@ -230,6 +294,7 @@ $(document).ready(function() {
 				$(".highlighted").find(".language")[0].innerHTML = data.language;
 				$(".highlighted").find(".category")[0].innerHTML = data.category;
 				$(".highlighted").find(".cataloguer")[0].innerHTML = data.cataloguer;
+				$(".highlighted").find(".filename")[0].innerHTML = data.filename;
                 $(".highlighted").find(".id")[0].innerHTML = $("#editForm [name='id']").val();
             },
             error: function() {
@@ -242,6 +307,12 @@ $(document).ready(function() {
         event.preventDefault();
         sync($(".highlighted"));
     });
+    
+    $("#logoutLink").on("click", function(event) {
+		event.preventDefault();
+		localStorage.removeItem("token");
+		window.location.replace("/index.html");
+	});
 });
 
 $(document).on("click", "tr", function(event) {
@@ -257,9 +328,15 @@ $(document).on("click", ".remove", function(event) {
     $.ajax({
         url: url,
         type: "DELETE",
+        beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
         success: function() {
             //ukloni i na strani 
             tr_parent.remove()
+        },
+        error: function(err) {
+        	console.log(err);
         }
     });
 });

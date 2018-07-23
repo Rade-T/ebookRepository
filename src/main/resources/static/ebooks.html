@@ -2,177 +2,173 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ebookRepositoryFrontend</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
-    <link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/ebooks.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ebookRepositoryFrontend</title>
+<link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="assets/css/Contact-Form-Clean.css">
+<link rel="stylesheet" href="assets/css/Navigation-with-Button.css">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="js/ebooks.js"></script>
 </head>
 
 <body>
-<div>
-    <nav class="navbar navbar-default navigation-clean-button">
-        <div class="container">
-            <div class="navbar-header"><a class="navbar-brand" href="index.html">Knjige</a>
-                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span
-                        class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
-                        class="icon-bar"></span><span class="icon-bar"></span></button>
-            </div>
-            <div
-                    class="collapse navbar-collapse" id="navcol-1">
-                <ul class="nav navbar-nav">
-                    <li class="" role="presentation"><a id="newLanguageBtn"
-                                                        class="btn btn-secondary" ref="#inputModal" data-toggle="modal"
-                                                        data-target="#inputModal">Nova knjiga</a></li>
-                </ul>
-                <p class="navbar-text navbar-right actions"><a class="navbar-link login" href="#">Log In</a></p>
-            </div>
-        </div>
-    </nav>
-</div>
-<div class="container">
-    <div class="table-responsive">
-        <table id="dataTable" class="table">
-            <th>Id</th>
-            <th>Naslov</th>
-            <th>Autor</th>
-            <th>Godina izdanja</th>
-            <th>Kljucne reci</th>
-            <th>Jezik</th>
-            <th>Kategorija</th>
-            <th>Kataloger</th>
-        </table>
-    </div>
+	<div>
+		<nav class="navbar navbar-default navigation-clean-button">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="index.html">Knjige</a>
+					<button class="navbar-toggle collapsed" data-toggle="collapse"
+						data-target="#navcol-1">
+						<span class="sr-only">Toggle navigation</span><span
+							class="icon-bar"></span><span class="icon-bar"></span><span
+							class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="collapse navbar-collapse" id="navcol-1">
+					<ul class="nav navbar-nav">
+						<li id="newLanguageItem" class="" role="presentation"><a
+							class="btn btn-secondary" ref="#inputModal" data-toggle="modal"
+							data-target="#inputModal">Nova knjiga</a></li>
+					</ul>
+					<p class="navbar-text navbar-right actions">
+						<a id="loginLink" class="navbar-link login" href="login.html">Log In</a>
+                    	<a id="logoutLink" class="navbar-link login" href="#">Log Out</a>
+					</p>
+				</div>
+			</div>
+		</nav>
+	</div>
+	<div class="container">
+		<div class="table-responsive">
+			<table id="dataTable" class="table">
+				<th>Id</th>
+				<th>Naslov</th>
+				<th>Autor</th>
+				<th>Godina izdanja</th>
+				<th>Kljucne reci</th>
+				<th>Jezik</th>
+				<th>Kategorija</th>
+				<th>Kataloger</th>
+			</table>
+		</div>
 
-    <div class="panel">
-        <form id="editForm">
+		<div id="editBookPanel" class="panel">
+			<form id="editForm">
 
-            <div class="form-group">
-                <label for="id">Id</label>
-                <input disabled type="text" class="form-control" name="id" id="id"/>
-                <span class="error"></span>
-            </div>
+				<input id="filename" type="hidden"></input>
+				<div class="form-group">
+					<label for="id">Id</label> <input disabled type="text"
+						class="form-control" name="id" id="id" /> <span class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="title">Naslov</label>
-                <input type="text" class="form-control" name="title"
-                       id="title"/>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="title">Naslov</label> <input type="text"
+						class="form-control" name="title" id="title" /> <span
+						class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="author">Autor</label>
-                <input type="text" class="form-control" name="author"
-                       id="author"/>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="author">Autor</label> <input type="text"
+						class="form-control" name="author" id="author" /> <span
+						class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="keywords">Kljucne reci</label>
-                <input type="text" class="form-control" name="keywords"
-                       id="keywords"/>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="keywords">Kljucne reci</label> <input type="text"
+						class="form-control" name="keywords" id="keywords" /> <span
+						class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="year">Godina izdanja</label>
-                <input type="text" class="form-control" name="year"
-                       id="year"/>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="year">Godina izdanja</label> <input type="text"
+						class="form-control" name="year" id="year" /> <span class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="language">Jezik</label>
-                <select name="language" id="language"></select>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="language">Jezik</label> <select name="language"
+						id="language"></select> <span class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="category">Kategorija</label>
-                <select name="category" id="category"></select>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="category">Kategorija</label> <select name="category"
+						id="category"></select> <span class="error"></span>
+				</div>
 
-            <div class="form-group">
-                <label for="cataloguer">Kataloger</label>
-                <select name="cataloguer" id="cataloguer"></select>
-                <span class="error"></span>
-            </div>
+				<div class="form-group">
+					<label for="cataloguer">Kataloger</label> <select name="cataloguer"
+						id="cataloguer"></select> <span class="error"></span>
+				</div>
 
-            <div id="formActions">
-                <input id="potvrda" type="button" value="Potvrda"
-                       style="margin-left: 6em"> <a id="rollback" href="#"
-                                                    style="margin-left: 6em">Rollback</a>
-            </div>
-        </form>
-    </div>
-</div>
+				<div id="formActions">
+					<input id="potvrda" type="button" value="Potvrda"
+						style="margin-left: 6em"> <a id="rollback" href="#"
+						style="margin-left: 6em">Rollback</a>
+				</div>
+			</form>
+		</div>
+	</div>
 
-<div class="modal" id="inputModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Novi jezik</h5>
-                <button type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form id="inputForm">
-                <div class="modal-body">
-                    <input type="hidden" name="id" id="id"/>
-                    <p>
-                        <label for="title">Naslov</label> <input class="form-control" type="text" name="title"
-                                                                 id="title"/>
-                    </p>
-                    <p>
-                        <label for="author">Autor</label> <input class="form-control" type="text" name="author"
-                                                                 id="author"/>
-                    </p>
-                    <p>
-                        <label for="keywords">Kljucne reci</label> <input class="form-control" type="text"
-                                                                          name="keywords"
-                                                                          id="keywords"/>
-                    </p>
-                    <p>
-                        <label for="year">Godina izdanja</label> <input class="form-control" type="text" name="year"
-                                                                        id="year"/>
-                    </p>
-                    <p>
-                        <label for="pdf">PDF knjige</label> <input type="file" name="pdf"
-                                                                        id="pdf"/>
-                    </p>
-                    <p>
-                        <label for="languageSelect">Jezik</label>
-                        <select id="languageSelect" name="languageSelect">
-                        </select>
-                    </p>
-                    <p>
-                        <label for="categorySelect">Kategorija</label>
-                        <select id="categorySelect" name="categorySelect">
-                        </select>
-                    </p>
-                    <p>
-                        <label for="cataloguerSelect">Kataloger</label>
-                        <select id="cataloguerSelect" name="cataloguerSelect">
-                        </select>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="add">Potvrda</button>
-                    <button type="button" class="btn btn-secondary"
-                            data-dismiss="modal">Zatvori
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+	<div class="modal" id="inputModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Novi jezik</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form id="inputForm">
+					<div class="modal-body">
+						<input type="hidden" name="id" id="id" />
+						<p>
+							<label for="title">Naslov</label> <input class="form-control"
+								type="text" name="title" id="title" />
+						</p>
+						<p>
+							<label for="author">Autor</label> <input class="form-control"
+								type="text" name="author" id="author" />
+						</p>
+						<p>
+							<label for="keywords">Kljucne reci</label> <input
+								class="form-control" type="text" name="keywords" id="keywords" />
+						</p>
+						<p>
+							<label for="year">Godina izdanja</label> <input
+								class="form-control" type="text" name="year" id="year" />
+						</p>
+						<p>
+							<label for="pdf">PDF knjige</label> <input type="file" name="pdf"
+								id="pdf" />
+						</p>
+						<p>
+							<label for="languageSelect">Jezik</label> <select
+								id="languageSelect" name="languageSelect">
+							</select>
+						</p>
+						<p>
+							<label for="categorySelect">Kategorija</label> <select
+								id="categorySelect" name="categorySelect">
+							</select>
+						</p>
+						<p>
+							<label for="cataloguerSelect">Kataloger</label> <select
+								id="cataloguerSelect" name="cataloguerSelect">
+							</select>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="add">Potvrda</button>
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Zatvori</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
