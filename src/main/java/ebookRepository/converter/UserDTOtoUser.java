@@ -23,7 +23,7 @@ public class UserDTOtoUser implements Converter<UserDTO, User> {
 		u.setLastname(arg0.getLastname());
 		u.setPassword(arg0.getPassword());
 		u.setUsername(arg0.getUsername());
-		u.setType(arg0.getType());
+//		u.setType(arg0.getType());
 		u.setCategory( categoryService.findOne(arg0.getCategoryId()) );
 		return u;
 	}

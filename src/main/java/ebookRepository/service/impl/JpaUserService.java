@@ -49,5 +49,10 @@ public class JpaUserService implements UserService {
 		userRepository.delete(users);
 		return null;
 	}
+	
+	@Override
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
 
 }

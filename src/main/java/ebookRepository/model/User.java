@@ -35,9 +35,6 @@ public class User {
 
 	private String password;
 
-	//@Column(name = "Type", columnDefinition = "varchar(30)")
-	private String type;
-
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Category category;
 
@@ -82,14 +79,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Category getCategory() {

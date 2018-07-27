@@ -1,187 +1,168 @@
-var app = angular.module('cat-app', []);
 var token;
+var role;
 
-app.controller('CategoryCRUDCtrl', ['$scope', '$http', '$window', 'CategoryCRUDService', function ($scope, $http, $window, CategoryCRUDService) {
-    token = localStorage.getItem('token');
-
-    // if (!token) {
-    //     window.location.replace("/index.html");
-    // }
-	$http.get("api/categories")
-	.then(function (response) {$scope.categories = response.data;});
-	
-	$scope.category = {};
-	
-	$scope.selectCategory = function (id) {
-		$scope.category.id = id;
-		$scope.getCategory($scope.selected);
+function highlightRow(row) {
+	// ne reagujemo na klik na header tabele, samo obicne redove
+	// this sadrzi red na koji se kliknulo
+	if (!$(row).hasClass("header")) {
+		// klasa highlighted postavlja pozadinu na plavu
+		// njenim dodavanjem ili uklanjanjem oznacavamo da neki red
+		// dobija, odnosno gubi selekciju
+		// uklanjamo sa trenutno selektovanog
+		$(".highlighted").removeClass("highlighted");
+		// dodajemo na novi selektovani
+		$(row).addClass("highlighted");
+		// pozivamo sinhronizaciju, prosledjujemo dati red
+		sync($(row));
 	}
-	
-	$scope.saveCategory = function () {
-		if ($scope.category.id == null) {
-			$scope.addCategory();
-		} else {
-			$scope.updateCategory();
+}
+
+function sync(item){
+	id = item.find(".id").html()
+	name = item.find(".name").html()
+	$("#name").val(name);
+	$("#id").val(id);
+}
+
+$(document).ready(function() {
+	token = localStorage.getItem('token');
+	if (!token) {
+        $("#logoutLink").remove();
+        window.location.replace("index.html");
+    } else {
+    	$("#loginLink").remove();
+    	$.ajax({
+    		url: "http://localhost:8080/api/users/role",
+    		type: "GET",
+    		beforeSend: function (request) {
+                request.setRequestHeader("X-Auth-Token", token);
+        	},
+    		success: function(data) {
+    			console.log(data);
+    			role = data;
+    			if (role == "ROLE_SUBSCRIBER") {
+    		        window.location.replace("/index.html");
+    			}
+    		},
+    		error: function(error) {
+    			console.log(error);
+    		}
+    	});
+    }
+	$.ajax({
+		url : "/api/categories/",
+		type: "GET",
+		beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+		success: function(data) {
+			console.log("Ucitiavanje kategorija");
+			for (i = 0; i < data.length; i++) {
+				var newRow = "<tr>"
+					+ "<td class=\"id\">" + data[i].id + "</td>"
+					+ "<td class=\"name\">" + data[i].name + "</td>"
+					+ "<td><a class=\"remove btn btn-danger\" href='/api/categories/" + data[i].id + "'>Obrisi" 
+					+ "</a></td>" +
+					+ "</tr>"
+
+					$("#dataTable").append(newRow)
+			}
 		}
-	}
+	});
 	
-    $scope.updateCategory = function () {
-        CategoryCRUDService.updateCategory($scope.category.id, $scope.category.name)
-          .then(function success(response){
-              $scope.message = 'Category data updated!';
-              $scope.errorMessage = '';
-          },
-          function error(response){
-              $scope.errorMessage = 'Error updating category!';
-              $scope.message = '';
-          });
-        $window.location.reload();
-    }
-    
-    $scope.getCategory = function (destination) {
-        var id = $scope.category.id;
-        CategoryCRUDService.getCategory($scope.category.id)
-          .then(function success(response){
-              $scope.category = response.data;
-              $scope.category.id = id;
-              $scope.message='';
-              $scope.errorMessage = '';
-          },
-          function error (response ){
-              $scope.message = '';
-              if (response.status === 404){
-                  $scope.errorMessage = 'Category not found!';
-              }
-              else {
-                  $scope.errorMessage = "Error getting category!";
-              }
-          });
-    }
-    
-    $scope.addCategory = function () {
-        if ($scope.category != null && $scope.category.name) {
-            CategoryCRUDService.addCategory($scope.category.name)
-              .then (function success(response){
-                  $scope.message = 'Category added!';
-                  $scope.errorMessage = '';
-              },
-              function error(response){
-                  $scope.errorMessage = 'Error adding category!';
-                  $scope.message = '';
-            });
+	
+	$("#add").click(function(){
+		// pripremamo JSON koji cemo poslati
+			console.log("start");
+			formData = JSON.stringify({
+	            name :$("#inputForm [name='name']").val()
+	        });
+			console.log(formData);
+			$.ajax({
+				url: "/api/categories/",
+				type: "POST",
+				// saljemo json i ocekujemo json nazad
+				contentType: "application/json",
+				datatype: 'json',
+				data: formData,
+				beforeSend: function (request) {
+		            request.setRequestHeader("X-Auth-Token", token);
+		    	},
+				success: function(data) {
+					var newRow = "<tr>"
+						+ "<td class=\"id\">" + data.id + "</td>"
+						+ "<td class=\"name\">" + data.name + "</td>"
+						+ "<td><a class=\"remove btn btn-danger\" href='/api/categories/" + data.id + "'>Obrisi"
+						+ "</a></td>" +
+						+ "</tr>"
+					
+					$("#dataTable").append(newRow)
+				  },
+				  error: function(data) {
+					  console.log(data);
+				  }
+				});
+			$('#inputModal').modal('toggle');
+			console.log("end");
+	 });
+	
+	$("#potvrda").on("click", function(event){
+		event.preventDefault();
+		console.log("Kliknuta potvrda");
+		formData = JSON.stringify({
+            name :$("#editForm [name='name']").val(),
+        });
+		$.ajax({
+			url: "/api/categories/" + $("#editForm [name='id']").val(),
+			type: "POST",
+			data: formData,
+			// saljemo json i ocekujemo json nazad
+			contentType: "application/json",
+			datatype: 'json',
+			beforeSend: function (request) {
+	            request.setRequestHeader("X-Auth-Token", token);
+	    	},
+			success: function(data) {
+				$(".highlighted").find(".name")[0].innerHTML = data.name;
+				$(".highlighted").find(".id")[0].innerHTML = $("#editForm [name='id']").val();
+			  },
+			error: function() {
+				console.log("Nije updateovao!")
+			}
+			});
+	});
+	
+	$("#rollback").click(function(event){
+		event.preventDefault();
+		sync($(".highlighted"));
+	});
+	
+	$("#logoutLink").on("click", function(event) {
+		event.preventDefault();
+		localStorage.removeItem("token");
+		window.location.replace("/index.html");
+	});
+});
+
+$(document).on("click", "tr", function(event) {
+	highlightRow(this)
+});
+
+$(document).on("click", ".remove", function(event){
+	// ne salji get zahtev
+	event.preventDefault(); 
+	url = $(this).attr("href")
+	// red koji se treba izbrisati ako je brisanje na serveru bilo uspesno
+	tr_parent = $(this).closest("tr")
+	$.ajax({
+    	url: url,
+    	type: "DELETE",
+    	beforeSend: function (request) {
+            request.setRequestHeader("X-Auth-Token", token);
+    	},
+    	success: function(){
+    		// ukloni i na strani
+			tr_parent.remove()
         }
-        else {
-            $scope.errorMessage = 'Please enter a name!';
-            $scope.message = '';
-        }
-        $window.location.reload();
-    }
-    
-    $scope.deleteCategory = function (id, $index) {
-        CategoryCRUDService.deleteCategory(id)
-          .then (function success(response){
-              $scope.message = 'Category deleted!';
-              $scope.category = null;
-              $scope.errorMessage='';
-              document.getElementById("categoryTable").deleteRow($index);
-          },
-          function error(response){
-              $scope.errorMessage = 'Error deleting category!';
-              $scope.message='';
-          })
-          $window.location.reload();
-    }
-    
-    $scope.getAllCategories = function () {
-        CategoryCRUDService.getAllCategories()
-          .then(function success(response){
-              $scope.categories = response.data._embedded.categories;
-              $scope.message='';
-              $scope.errorMessage = '';
-          },
-          function error (response ){
-              $scope.message='';
-              $scope.errorMessage = 'Error getting categories!';
-          });
-    }
-
-}]);
-
-app.service('CategoryCRUDService',['$http', function ($http) {
-	
-    this.getCategory = function getCategory(categoryId){
-        return $http({
-          method: 'GET',
-          url: 'api/categories/'+categoryId
-        });
-	}
-	
-    this.addCategory = function addCategory(name){
-        return $http({
-          method: 'POST',
-          url: 'api/categories/',
-          data: {name:name}
-        });
-    }
-	
-    this.deleteCategory = function deleteCategory(id){
-        return $http({
-          method: 'DELETE',
-          url: 'api/categories/'+id
-        })
-    }
-	
-    this.updateCategory = function updateCategory(id,name){
-        return $http({
-          method: 'POST',
-          url: 'api/categories/'+id,
-          data: {id: id, name:name}
-        })
-    }
-	
-    this.getAllCategories = function getAllCategories(){
-        return $http({
-          method: 'GET',
-          url: 'api/categories/'
-        });
-    }
-
-}]);
-
-//$(document).ready(function (){
-//	$.ajax({
-//        type: "GET",
-//        url: "api/categories/",
-//        dataType: "json",
-//        success: function (data) {
-//        	for (i = 0;i < data.length;i++) {
-//        		$("#categoryTableBody").append("<tr><td>" + data[i].name + "</td></tr>");
-//        		console.log(data[i]);
-//        	}
-//        },
-//        error: function (err) {
-//        	console.log("Greska prilikom ucitavanja");
-//        	console.log(err.responseText);
-//        }
-//    });
-//});
-//
-//$("#addCategoryBtn").on("click", function(event) {
-//	event.preventDefault();
-//	var data = {
-//		"name" : $("#nameInput").val()
-//	};
-//	$.ajax({
-//		type: "POST",
-//		url: "api/categories/",
-//		data: JSON.stringify(data),
-//		contentType: "application/json",
-//		success: function(response) {
-//			location.reload();
-//		},
-//		error: function (err) {
-//			console.log(err);
-//            alert("Greska");
-//        }
-//	});
-//});
+	});
+});

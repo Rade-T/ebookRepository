@@ -8,6 +8,7 @@ $(document).ready(function() {
         $("#categoriesItem").remove();
         $("#languagesItem").remove();
         $("#passwordItem").remove();
+        $("#userDataItem").remove();
     } else {
     	$("#loginLink").remove();
     	$.ajax({
